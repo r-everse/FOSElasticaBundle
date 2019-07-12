@@ -32,18 +32,20 @@ class Client extends BaseClient
     /**
      * @param string $path
      * @param string $method
-     * @param array  $data
-     * @param array  $query
+     * @param array $data
+     * @param array $query
      *
+     * @param string $contentType
      * @return \Elastica\Response
+     * @throws \Exception
      */
-    public function request($path, $method = Request::GET, $data = array(), array $query = array())
+    public function request($path, $method = Request::GET, $data = [], array $query = [], $contentType = Request::DEFAULT_CONTENT_TYPE)
     {
         if ($this->stopwatch) {
             $this->stopwatch->start('es_request', 'fos_elastica');
         }
 
-        $response = parent::request($path, $method, $data, $query);
+        $response = parent::request($path, $method, $data, $query, $contentType);
         $responseData = $response->getData();
 
         if (isset($responseData['took']) && isset($responseData['hits'])) {
